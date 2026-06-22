@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>셀렉트라 | 인플루언서 × 브랜드 매칭 플랫폼</title>
+  <meta name="description" content="인플루언서와 브랜드를 정밀하게 매칭해드립니다. 셀렉트라와 함께 딱 맞는 파트너를 만나보세요." />
+  <style>
+    /* ───────── 기본 리셋 ───────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      color: #111;
+      background: #fff;
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    /* ───────── 히어로 ───────── */
+    .hero {
+      background: #0f0f1a;
+      padding: 60px 24px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .glow-a {
+      position: absolute; top: -50px; left: -50px;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(99,102,241,0.30) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .glow-b {
+      position: absolute; bottom: -70px; right: -40px;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(236,72,153,0.20) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(99,102,241,0.18);
+      border: 1px solid rgba(99,102,241,0.42);
+      color: #a5b4fc;
+      font-size: 12px; padding: 6px 16px;
+      border-radius: 999px; margin-bottom: 24px;
+      letter-spacing: 0.04em; position: relative; z-index: 1;
+    }
+    .pill-dot { width: 7px; height: 7px; background: #818cf8; border-radius: 50%; }
+    .hero h1 {
+      font-size: 32px; font-weight: 800;
+      color: #fff; line-height: 1.22;
+      margin-bottom: 18px;
+      position: relative; z-index: 1;
+    }
+    .hero h1 .accent {
+      background: linear-gradient(90deg, #818cf8, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 14px; color: rgba(255,255,255,0.55);
+      line-height: 1.75; margin-bottom: 32px;
+      position: relative; z-index: 1;
+    }
+
+    /* ───────── 탭 토글 ───────── */
+    .tab-toggle {
+      display: flex;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 13px; padding: 4px; gap: 4px;
+      margin-bottom: 24px;
+      position: relative; z-index: 1;
+    }
+    .tab-btn {
+      flex: 1; padding: 11px 8px;
+      border-radius: 10px; border: none;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: background .2s, color .2s;
+    }
+    .tab-btn.active { background: #fff; color: #1a1a2e; }
+    .tab-btn:not(.active) { background: transparent; color: rgba(255,255,255,0.50); }
+
+    /* ───────── 히어로 버튼 ───────── */
+    .hero-cta { display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 1; }
+    .btn-main {
+      width: 100%; padding: 16px;
+      border-radius: 14px; border: none;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer; transition: opacity .15s, transform .1s;
+    }
+    .btn-main:active { transform: scale(.97); }
+    .btn-main:hover { opacity: .88; }
+    .btn-purple { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; }
+    .btn-outline { background: rgba(255,255,255,0.09); color: #fff; border: 1px solid rgba(255,255,255,0.22); }
+
+    /* ───────── 통계 ───────── */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #e5e7eb; }
+    .stat { background: #fff; padding: 22px 8px; text-align: center; }
+    .stat-n {
+      font-size: 24px; font-weight: 800;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .stat-l { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+
+    /* ───────── 공통 섹션 ───────── */
+    .section { padding: 44px 24px; }
+    .section.gray { background: #f9f9fb; }
+    .sec-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; color: #111; }
+    .sec-sub { font-size: 14px; color: #9ca3af; margin-bottom: 28px; line-height: 1.65; }
+
+    /* ───────── 브랜드 카드 ───────── */
+    .brand-card {
+      background: #fff; border: 1px solid #f0f0f0;
+      border-radius: 16px; padding: 16px;
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 14px;
+      cursor: pointer; transition: border-color .15s, box-shadow .15s;
+    }
+    .brand-card:hover { border-color: #6366f1; box-shadow: 0 4px 18px rgba(99,102,241,0.1); }
+    .brand-icon {
+      width: 50px; height: 50px; border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .brand-info { flex: 1; min-width: 0; }
+    .brand-name { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+    .brand-cat { font-size: 12px; color: #9ca3af; }
+    .brand-right { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; }
+    .badge { font-size: 10px; padding: 3px 10px; border-radius: 999px; font-weight: 700; white-space: nowrap; }
+    .badge-hot { background: #fce7f3; color: #9d174d; }
+    .badge-new { background: #ede9fe; color: #5b21b6; }
+    .badge-open { background: #d1fae5; color: #065f46; }
+    .apply-btn {
+      font-size: 12px; padding: 7px 16px;
+      border-radius: 9px; background: #6366f1;
+      color: #fff; border: none; cursor: pointer;
+      font-weight: 700; white-space: nowrap;
+      transition: opacity .15s;
+    }
+    .apply-btn:hover { opacity: .85; }
+
+    /* ───────── 누구세요 섹션 ───────── */
+    .who-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 0; }
+    .who-card {
+      background: #fff; border: 1px solid #f0f0f0;
+      border-radius: 16px; padding: 22px 16px; text-align: center;
+    }
+    .who-emoji { font-size: 32px; margin-bottom: 12px; }
+    .who-title { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+    .who-desc { font-size: 12px; color: #9ca3af; line-height: 1.6; margin-bottom: 18px; }
+    .who-btn {
+      width: 100%; padding: 12px;
+      border-radius: 11px; border: none;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .who-btn:hover { opacity: .85; }
+    .who-btn.inf { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; }
+    .who-btn.brand { background: #FEE500; color: #1a1201; }
+
+    /* ───────── 진행 단계 ───────── */
+    .step-item { display: flex; gap: 16px; margin-bottom: 30px; }
+    .step-num {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff; font-size: 17px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .step-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .step-body p { font-size: 13px; color: #9ca3af; line-height: 1.65; }
+
+    /* ───────── 연락 섹션 ───────── */
+    .contact-card {
+      background: #fff; border: 1px solid #f0f0f0;
+      border-radius: 16px; padding: 20px;
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .contact-icon {
+      width: 50px; height: 50px; border-radius: 13px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .contact-info { flex: 1; }
+    .contact-info h3 { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+    .contact-info p { font-size: 12px; color: #9ca3af; }
+    .contact-link {
+      padding: 11px 18px; border-radius: 11px;
+      font-size: 14px; font-weight: 700;
+      text-decoration: none; white-space: nowrap;
+      display: inline-block; border: none; cursor: pointer;
+      transition: opacity .15s;
+    }
+    .contact-link:hover { opacity: .85; }
+    .link-kakao { background: #FEE500; color: #1a1201; }
+    .link-mail { background: #6366f1; color: #fff; }
+
+    /* ───────── 푸터 ───────── */
+    .footer { background: #0a0a14; padding: 32px 24px; text-align: center; }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: -.02em; }
+    .footer-logo .accent {
+      background: linear-gradient(90deg, #818cf8, #ec4899);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .footer-p { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.7; }
+
+    /* ───────── 팝업 모달 ───────── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.60);
+      z-index: 999;
+      align-items: flex-end; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 22px 22px 16px 16px;
+      padding: 10px 24px 32px;
+      width: 100%; max-width: 480px;
+      animation: slideUp .25s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .modal-handle {
+      width: 40px; height: 4px;
+      background: #e5e7eb; border-radius: 2px;
+      margin: 14px auto 22px;
+    }
+    .modal-box h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #111; }
+    .modal-box p { font-size: 14px; color: #9ca3af; margin-bottom: 22px; line-height: 1.65; }
+    .modal-opts { display: flex; flex-direction: column; gap: 10px; }
+    .modal-opt {
+      display: block; width: 100%; padding: 15px;
+      border-radius: 14px; font-size: 16px; font-weight: 700;
+      text-align: center; text-decoration: none;
+      border: none; cursor: pointer;
+      transition: opacity .15s;
+    }
+    .modal-opt:hover { opacity: .87; }
+    .modal-opt.kakao { background: #FEE500; color: #1a1201; }
+    .modal-opt.mail  { background: #6366f1; color: #fff; }
+    .modal-close {
+      width: 100%; margin-top: 10px; padding: 13px;
+      border: none; background: none;
+      font-size: 14px; color: #9ca3af; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ★ 히어로 섹션 -->
+  <section class="hero">
+    <div class="glow-a"></div>
+    <div class="glow-b"></div>
+    <div class="pill"><span class="pill-dot"></span>인플루언서 × 브랜드 매칭</div>
+    <h1>딱 맞는 <span class="accent">파트너</span>를<br>셀렉트라가<br>연결해드려요</h1>
+    <p>인플루언서와 브랜드를 정밀하게 매칭하는<br>셀렉트라입니다. 지금 바로 시작해보세요.</p>
+
+    <!-- 탭 토글 -->
+    <div class="tab-toggle">
+      <button class="tab-btn active" id="tabInf" onclick="switchTab('influencer')">인플루언서예요</button>
+      <button class="tab-btn" id="tabBrand" onclick="switchTab('brand')">브랜드예요</button>
+    </div>
+
+    <!-- 인플루언서용 버튼 -->
+    <div class="hero-cta" id="ctaInf">
+      <button class="btn-main btn-purple" onclick="openModal('마켓 신청')">마켓 신청하기</button>
+      <button class="btn-main btn-outline" onclick="openModal('인플루언서 상담')">상담 문의하기</button>
+    </div>
+    <!-- 브랜드용 버튼 -->
+    <div class="hero-cta" id="ctaBrand" style="display:none;">
+      <button class="btn-main btn-purple" onclick="openModal('브랜드 파트너 신청')">파트너 신청하기</button>
+      <button class="btn-main btn-outline" onclick="openModal('브랜드 상담')">브랜드 상담하기</button>
+    </div>
+  </section>
+
+  <!-- ★ 통계 -->
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n">200+</div><div class="stat-l">등록 브랜드</div></div>
+    <div class="stat"><div class="stat-n">1,500+</div><div class="stat-l">인플루언서</div></div>
+    <div class="stat"><div class="stat-n">98%</div><div class="stat-l">만족도</div></div>
+  </div>
+
+  <!-- ★ 브랜드 리스트 -->
+  <!-- 브랜드를 추가하거나 수정하려면 이 아래 brand-card 블록을 복사/수정하세요 -->
+  <section class="section">
+    <div class="sec-title">지금 모집 중인 브랜드</div>
+    <div class="sec-sub">원하는 브랜드를 골라 바로 신청하세요</div>
+
+    <div class="brand-card" onclick="openModal('뷰티브랜드 A 신청')">
+      <div class="brand-icon" style="background:#fce7f3;">💄</div>
+      <div class="brand-info">
+        <div class="brand-name">뷰티브랜드 A</div>            <!-- ← 브랜드 이름 -->
+        <div class="brand-cat">뷰티 · 스킨케어</div>          <!-- ← 카테고리 -->
+      </div>
+      <div class="brand-right">
+        <span class="badge badge-hot">인기</span>             <!-- badge-hot / badge-new / badge-open -->
+        <button class="apply-btn" onclick="event.stopPropagation();openModal('뷰티브랜드 A 신청')">신청</button>
+      </div>
+    </div>
+
+    <div class="brand-card" onclick="openModal('라이프스타일 B 신청')">
+      <div class="brand-icon" style="background:#d1fae5;">🏡</div>
+      <div class="brand-info">
+        <div class="brand-name">라이프스타일 B</div>
+        <div class="brand-cat">홈 · 인테리어</div>
+      </div>
+      <div class="brand-right">
+        <span class="badge badge-new">신규</span>
+        <button class="apply-btn" onclick="event.stopPropagation();openModal('라이프스타일 B 신청')">신청</button>
+      </div>
+    </div>
+
+    <div class="brand-card" onclick="openModal('푸드브랜드 C 신청')">
+      <div class="brand-icon" style="background:#fef3c7;">🍽️</div>
+      <div class="brand-info">
+        <div class="brand-name">푸드브랜드 C</div>
+        <div class="brand-cat">음식 · 식품</div>
+      </div>
+      <div class="brand-right">
+        <span class="badge badge-open">모집중</span>
+        <button class="apply-btn" onclick="event.stopPropagation();openModal('푸드브랜드 C 신청')">신청</button>
+      </div>
+    </div>
+
+    <div class="brand-card" onclick="openModal('패션브랜드 D 신청')">
+      <div class="brand-icon" style="background:#ede9fe;">👗</div>
+      <div class="brand-info">
+        <div class="brand-name">패션브랜드 D</div>
+        <div class="brand-cat">패션 · 의류</div>
+      </div>
+      <div class="brand-right">
+        <span class="badge badge-hot">인기</span>
+        <button class="apply-btn" onclick="event.stopPropagation();openModal('패션브랜드 D 신청')">신청</button>
+      </div>
+    </div>
+    <!-- 브랜드 추가 시 위 brand-card 블록 하나를 복사해서 붙여넣기 하세요 -->
+  </section>
+
+  <!-- ★ 누구세요? -->
+  <section class="section gray">
+    <div class="sec-title">누구세요?</div>
+    <div class="sec-sub">인플루언서도, 브랜드도 셀렉트라와 함께해요</div>
+    <div class="who-cards">
+      <div class="who-card">
+        <div class="who-emoji">🎥</div>
+        <div class="who-title">인플루언서</div>
+        <div class="who-desc">원하는 브랜드를 골라 마켓 신청하거나 상담 받아보세요</div>
+        <button class="who-btn inf" onclick="openModal('인플루언서 상담')">신청하기</button>
+      </div>
+      <div class="who-card">
+        <div class="who-emoji">🏢</div>
+        <div class="who-title">브랜드</div>
+        <div class="who-desc">딱 맞는 인플루언서와 연결되고 싶은 브랜드라면</div>
+        <button class="who-btn brand" onclick="openModal('브랜드 파트너 신청')">문의하기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ★ 진행 방법 -->
+  <section class="section">
+    <div class="sec-title">어떻게 진행되나요?</div>
+    <div class="sec-sub">간단한 3단계로 매칭돼요</div>
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>브랜드 또는 인플루언서 탐색</h3>
+        <p>원하는 카테고리에서 파트너를 찾아요</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>신청 또는 상담 문의</h3>
+        <p>마켓 신청 버튼을 누르거나 카톡·메일로 연락해요</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>매칭 & 협업 시작</h3>
+        <p>셀렉트라가 최적의 조건으로 연결해드려요</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ★ 연락하기 -->
+  <section class="section gray">
+    <div class="sec-title">바로 연락해요</div>
+    <div class="sec-sub">인플루언서도 브랜드도 편하게 연락 주세요</div>
+
+    <div class="contact-card">
+      <div class="contact-icon" style="background:#FEE500;">
+        <!-- 카카오 아이콘 -->
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+          <path d="M12 3C7.03 3 3 6.36 3 10.5c0 2.7 1.74 5.07 4.37 6.47L6.4 20.1c-.07.25.18.46.41.33l3.72-2.44A10.7 10.7 0 0012 18c4.97 0 9-3.36 9-7.5S16.97 3 12 3z" fill="#1a1201"/>
+        </svg>
+      </div>
+      <div class="contact-info">
+        <h3>카카오톡</h3>
+        <p>Sinnar · 빠른 답변</p>
+      </div>
+      <!-- ↓ 카카오 오픈채팅 링크로 바꿔주세요 -->
+      <a class="contact-link link-kakao" href="https://open.kakao.com/o/sSinnar" target="_blank">채팅하기</a>
+    </div>
+
+    <div class="contact-card">
+      <div class="contact-icon" style="background:#ede9fe;">
+        <!-- 메일 아이콘 -->
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="4" width="20" height="16" rx="2" stroke="#5b21b6" stroke-width="1.5"/>
+          <path d="M2 7l10 7 10-7" stroke="#5b21b6" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="contact-info">
+        <h3>이메일</h3>
+        <p>shinnari0903@gmail.com</p>  <!-- ← 이메일 주소 -->
+      </div>
+      <a class="contact-link link-mail" href="mailto:shinnari0903@gmail.com">메일 보내기</a>
+    </div>
+  </section>
+
+  <!-- ★ 푸터 -->
+  <footer class="footer">
+    <div class="footer-logo">SELEC<span class="accent">TRA</span></div>
+    <div class="footer-p">
+      © 2025 셀렉트라<br>
+      인플루언서 × 브랜드 매칭 플랫폼<br>
+      shinnari0903@gmail.com
+    </div>
+  </footer>
+
+  <!-- ★ 팝업 모달 (건드리지 마세요) -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <h2 id="modalTitle">연락하기</h2>
+      <p id="modalDesc">카카오톡이나 이메일로 편하게 문의해주세요. 빠르게 답변드릴게요!</p>
+      <div class="modal-opts">
+        <a class="modal-opt kakao" href="https://open.kakao.com/o/sSinnar" target="_blank">💬 카카오톡으로 문의</a>
+        <a class="modal-opt mail" href="mailto:shinnari0903@gmail.com">✉️ 이메일로 문의</a>
+      </div>
+      <button class="modal-close" onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+
+  <script>
+    // 탭 전환
+    function switchTab(type) {
+      var isInf = type === 'influencer';
+      document.getElementById('tabInf').classList.toggle('active', isInf);
+      document.getElementById('tabBrand').classList.toggle('active', !isInf);
+      document.getElementById('ctaInf').style.display = isInf ? 'flex' : 'none';
+      document.getElementById('ctaBrand').style.display = isInf ? 'none' : 'flex';
+    }
+
+    // 모달 열기
+    function openModal(title) {
+      document.getElementById('modalTitle').textContent = title;
+      var isBrand = title.includes('브랜드 파트너') || title.includes('브랜드 상담');
+      document.getElementById('modalDesc').textContent = isBrand
+        ? '브랜드 파트너십 문의를 남겨주세요. 셀렉트라가 맞는 인플루언서를 연결해드릴게요!'
+        : '카카오톡이나 이메일로 편하게 문의해주세요. 빠르게 답변드릴게요!';
+      document.getElementById('modal').classList.add('active');
+    }
+
+    // 모달 닫기
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+
+    // 배경 클릭 시 모달 닫기
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+</html>
