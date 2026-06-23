@@ -243,6 +243,18 @@
       border: none; background: none;
       font-size: 14px; color: #9ca3af; cursor: pointer;
     }
+
+    /* 복사 토스트 */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #1a1a2e; color: #fff;
+      padding: 12px 24px; border-radius: 999px;
+      font-size: 14px; font-weight: 600;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      z-index: 9999; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -263,12 +275,12 @@
     <!-- 인플루언서용 버튼 -->
     <div class="hero-cta" id="ctaInf">
       <a class="btn-main btn-kakao" href="https://open.kakao.com/o/s2IhaIAi" target="_blank">💬 카카오톡으로 마켓 신청</a>
-      <a class="btn-main btn-outline" href="mailto:shinnari0903@gmail.com">✉️ 이메일로 상담 문의</a>
+      <button class="btn-main btn-outline" onclick="copyEmail()">✉️ 이메일 주소 복사</button>
     </div>
     <!-- 브랜드용 버튼 -->
     <div class="hero-cta" id="ctaBrand" style="display:none;">
       <a class="btn-main btn-kakao" href="https://open.kakao.com/o/sbmP8HAi" target="_blank">💬 카카오톡으로 파트너 신청</a>
-      <a class="btn-main btn-outline" href="mailto:shinnari0903@gmail.com">✉️ 이메일로 상담 문의</a>
+      <button class="btn-main btn-outline" onclick="copyEmail()">✉️ 이메일 주소 복사</button>
     </div>
   </section>
 
@@ -281,15 +293,15 @@
 
   <!-- 브랜드 리스트 -->
   <section class="section">
-    <div class="sec-title">지금 마켓 모집 중인 브랜드</div>
-    <div class="sec-sub">원하는 브랜드를 골라 바로 신청하세요</div>
-    <div class="sec-sub">그 외 브랜드는 이메일 또는 카톡 문의주세요</div>
+    <div class="sec-title">지금 모집 중인 브랜드</div>
+    <div class="sec-sub" style="margin-bottom:6px;">원하는 브랜드를 골라 바로 신청하세요</div>
+    <div class="sec-sub" style="margin-bottom:24px;">그 외 브랜드는 이메일 또는 카톡 문의주세요</div>
 
     <div class="brand-card" onclick="openModal('seller')">
-      <div class="brand-icon" style="background:#fce7f3;">🍃</div>
+      <div class="brand-icon" style="background:#fce7f3;">💄</div>
       <div class="brand-info">
-        <div class="brand-name">피타니</div>
-        <div class="brand-cat">뷰티 · 건강기능식품</div>
+        <div class="brand-name">뷰티브랜드 A</div>
+        <div class="brand-cat">뷰티 · 스킨케어</div>
       </div>
       <div class="brand-right">
         <span class="badge badge-hot">인기</span>
@@ -300,7 +312,7 @@
     <div class="brand-card" onclick="openModal('seller')">
       <div class="brand-icon" style="background:#d1fae5;">🏡</div>
       <div class="brand-info">
-        <div class="brand-name">까사무띠</div>
+        <div class="brand-name">라이프스타일 B</div>
         <div class="brand-cat">홈 · 인테리어</div>
       </div>
       <div class="brand-right">
@@ -312,8 +324,8 @@
     <div class="brand-card" onclick="openModal('seller')">
       <div class="brand-icon" style="background:#fef3c7;">🍽️</div>
       <div class="brand-info">
-        <div class="brand-name">아르노글래스</div>
-        <div class="brand-cat">홈 · 인테리어</div>
+        <div class="brand-name">푸드브랜드 C</div>
+        <div class="brand-cat">음식 · 식품</div>
       </div>
       <div class="brand-right">
         <span class="badge badge-open">모집중</span>
@@ -324,20 +336,8 @@
     <div class="brand-card" onclick="openModal('seller')">
       <div class="brand-icon" style="background:#ede9fe;">👗</div>
       <div class="brand-info">
-        <div class="brand-name">Nat & Nin</div>
+        <div class="brand-name">패션브랜드 D</div>
         <div class="brand-cat">패션 · 의류</div>
-      </div>
-      <div class="brand-right">
-        <span class="badge badge-hot">인기</span>
-        <button class="apply-btn" onclick="event.stopPropagation();openModal('seller')">신청</button>
-      </div>
-    </div>
-
-        <div class="brand-card" onclick="openModal('seller')">
-      <div class="brand-icon" style="background:#ede9fe;">🍽️</div>
-      <div class="brand-info">
-        <div class="brand-name">전유영작가 흑유</div>
-        <div class="brand-cat">홈 · 인테리어</div>
       </div>
       <div class="brand-right">
         <span class="badge badge-hot">인기</span>
@@ -438,7 +438,7 @@
         <h3>이메일</h3>
         <p>shinnari0903@gmail.com</p>
       </div>
-      <a class="contact-link link-mail" href="mailto:shinnari0903@gmail.com">메일</a>
+      <button class="contact-link link-mail" onclick="copyEmail()">복사</button>
     </div>
   </section>
 
@@ -450,7 +450,17 @@
       인플루언서 × 브랜드 매칭 플랫폼<br>
       shinnari0903@gmail.com
     </div>
+    <a href="https://www.instagram.com/selectra_official/" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;margin-top:16px;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);text-decoration:none;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="1.8"/>
+        <circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.8"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="white"/>
+      </svg>
+    </a>
   </footer>
+
+  <!-- 복사 완료 토스트 -->
+  <div class="toast" id="toast">📋 이메일 주소가 복사됐어요!</div>
 
   <!-- 팝업 모달 -->
   <div class="modal-overlay" id="modal">
@@ -460,13 +470,22 @@
       <p id="modalDesc"></p>
       <div class="modal-opts">
         <a class="modal-opt kakao" id="modalKakao" href="#" target="_blank">💬 카카오톡으로 문의</a>
-        <a class="modal-opt mail" href="mailto:shinnari0903@gmail.com">✉️ 이메일로 문의</a>
+        <button class="modal-opt mail" onclick="copyEmail()">✉️ 이메일 주소 복사</button>
       </div>
       <button class="modal-close" onclick="closeModal()">닫기</button>
     </div>
   </div>
 
   <script>
+    // 이메일 복사
+    function copyEmail() {
+      navigator.clipboard.writeText('shinnari0903@gmail.com').then(function() {
+        var toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(function(){ toast.classList.remove('show'); }, 2000);
+      });
+    }
+
     // 탭 전환
     function switchTab(type) {
       var isInf = type === 'influencer';
